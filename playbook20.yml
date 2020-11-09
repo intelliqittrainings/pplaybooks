@@ -1,0 +1,17 @@
+---
+- name: Change permissions of a file based on a condition
+  hosts: all
+  tasks:
+   - name: Capture info about file1
+     stat:
+      path: /tmp/file1
+     register: a
+   - name: Display output of above module
+     debug:
+      var: a
+   - name: Cahnge permissions of file if it is not executable
+     file:
+      name: /tmp/file1
+      state: touch
+      mode: 770
+     when: a.stat.executable == false

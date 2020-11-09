@@ -1,0 +1,10 @@
+---
+- name: Install multiple s/w
+  hosts: all
+  tasks:
+   - name: Install s/w's
+     apt:
+      name: ['git', 'tree', 'maven']
+      state: present
+      update_cache: yes
+

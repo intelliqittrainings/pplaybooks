@@ -1,0 +1,8 @@
+---
+- name: xxxxxyyyxxxx
+  hosts: all
+  tasks:
+   - name: Install
+     apt:
+      name: "{{a}}"
+      state: "{{b}}"

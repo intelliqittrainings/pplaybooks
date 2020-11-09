@@ -1,0 +1,11 @@
+---
+- name: Install/uninstall s/w applications using global scope varibales
+  hosts: all
+  tasks:
+   - name: Install/uninstall s/w app
+     apt:
+      name: "{{a}}"
+      state: "{{b}}"
+      update_cache: "{{c}}"
+...
+
