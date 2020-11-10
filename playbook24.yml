@@ -1,0 +1,19 @@
+---
+- name: Error Handling
+  hosts: all
+  tasks:
+   - block: 
+      - name: Install tomcat9 using apt
+        apt:
+         name: tomcat9
+         state: present
+     rescue:
+      - name: Install tomcat9 using yum
+        yum:
+         name: tomcat9
+         state: present
+     always:
+      - debug: 
+         msg: "Tomcat setup successfull"
+
+
