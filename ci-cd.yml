@@ -1,0 +1,54 @@
+---
+- name: Install required s/w's for ci-cd
+  hosts: all
+  tasks:
+   - name: Install s/w's
+     apt:
+      name: "{{item.a}}"
+      state: present
+      update_cache: "{{item.b}}"
+     with_items:
+      - {a: git,b: yes}
+      - {a: openjdk-8-jdk,b: no}
+      - {a: maven,b: no}
+      - {a: tomcat9,b: no}
+      - {a: tomcat9-admin,b: no}
+- name: Continuous Download and Build
+  hosts: devserver
+  tasks:
+   - name: Download the code created by developers
+     git:
+      repo: https://github.com/intelliqittrainings/maven.git
+      dest:  /tmp/mygit
+   - name: Create an artifact from the above code
+     shell: cd /tmp/mygit;mvn package
+   - name: Fetch the artifact from devserver to controller
+     fetch:
+      src: /tmp/mygit/webapp/target/webapp.war
+      dest: /tmp
+- name: Continuous Deployment and Testing
+  hosts: qaserver
+  tasks:
+   - name: Deploy artifact into tomcat on QaServer
+     copy:
+      src: /tmp/172.31.16.122/tmp/mygit/webapp/target/webapp.war
+      dest: /var/lib/tomcat9/webapps/testapp.war
+   - name: Restart tomcat
+     service:
+      name: tomcat9
+      state: restarted
+   - name: Downlaod the selenium test scripts 
+     git:
+      repo: https://github.com/intelliqittrainings/FunctionalTesting.git
+      dest: /tmp/test-git
+   - name: Execute the seclenium test scripts
+     shell: java -jar /tmp/test-git/testing.jar
+- name: Continuous Delivery
+  hosts: prodserver
+  tasks:
+   - name: Deploy the artifact into prodserver tomcat
+     copy:
+      src: /tmp/172.31.16.122/tmp/mygit/webapp/target/webapp.war
+      dest: /var/lib/tomcat9/webapps/prodapp.war
+
+
