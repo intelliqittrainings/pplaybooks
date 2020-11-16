@@ -1,0 +1,19 @@
+- name: Continuous Testing
+  hosts: qaserver
+  tasks:
+   - block:
+      - name: Downlaod the selenium test scripts
+        git:
+         repo: https://github.com/intelliqittrainings/FunctionalTesting.git
+         dest: /tmp/test-git
+      - name: Execute the seclenium test scripts
+        shell: java -jar /tmp/test-git/testing.jar
+     rescue:
+      - name: Send email notification to testers
+        mail:
+         host: localhost
+         port: 25
+         to: testers@oultook.com
+         subject: Testing Failed
+         body: Functional testing using seleniuym has failed
+

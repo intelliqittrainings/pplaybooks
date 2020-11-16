@@ -1,0 +1,19 @@
+- name: Continuous Delivery
+  hosts: prodserver
+  tasks:
+   - block:
+      - name: Deploy the artifact into prodserver tomcat
+        copy:
+         src: /tmp/172.31.16.122/tmp/mygit/webapp/target/webapp.war
+         dest: /var/lib/tomcat9/webapps/prodapp.war
+     rescue:
+      - name: Send email notification to delivery
+        mail:
+         host: localhost
+         port: 25
+         to: delivery.team@oultook.com
+         subject: Download Failed
+         body: Unable to doploy into prod servers tomcat
+
+
+

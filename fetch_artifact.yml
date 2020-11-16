@@ -1,0 +1,17 @@
+- name: Fetch the artifact from devserver
+  hosts: devserver
+  tasks:
+   - block:
+      - name: Fetch the artifact from devserver to controller
+        fetch:
+         src: /tmp/mygit/webapp/target/webapp.war
+         dest: /tmp
+     rescue:
+      - name: Send email notification to devopsadmin
+        mail:
+         host: localhost
+         port: 25
+         to: devops.admin@oultook.com
+         subject: Artifact fetch Failed
+         body: Unable to copy the artifact from devservert o controller
+

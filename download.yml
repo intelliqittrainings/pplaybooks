@@ -1,0 +1,19 @@
+- name: Continuous Download 
+  hosts: devserver
+  tasks:
+   - block:   
+      - name: Download the code created by developers
+        git:
+         repo: https://github.com/intelliqittrainings/maven.git
+         dest:  /tmp/mygit
+     rescue:
+      - name: Send email notification to gitadmin
+        mail:
+         host: localhost
+         port: 25
+         to: git.admin@oultook.com
+         subject: Download Failed
+         body: Unable to download code from remote git
+...
+
+  

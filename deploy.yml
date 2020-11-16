@@ -1,0 +1,25 @@
+- name: Continuous Deployment
+  hosts: qaserver
+  tasks:
+   - block:
+      - name: Deploy artifact into tomcat on QaServer
+        copy:
+         src: /tmp/172.31.16.122/tmp/mygit/webapp/target/webapp.war
+         dest: /var/lib/tomcat9/webapps/testapp.war
+        notify: Restart tomcat
+
+     rescue:
+      - name: Send email notification to middleware admin
+        mail:
+         host: localhost
+         port: 25
+         to: middleware.admin@oultook.com
+         subject: Deployment Failed
+         body: Unable to deploy artifact into tomcat on QAServers
+ 
+  handlers:
+   - name: Restart tomcat
+     service:
+      name: tomcat9
+      state: restarted
+

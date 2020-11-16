@@ -1,0 +1,19 @@
+- name: Continuous Build
+  hosts: devserver
+  tasks:
+   - block:
+      - name: Create an artifact from the above code
+        shell: cd /tmp/mygit;mvn package
+     rescue:
+      - name: Send email notification to developers
+        mail:
+         host: localhost
+         port: 25
+         to: developers@oultook.com
+         subject: Build Failed
+         body: Unable to create an artifact from code
+
+
+
+...
+
