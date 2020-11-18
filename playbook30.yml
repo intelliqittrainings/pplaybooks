@@ -1,0 +1,21 @@
+---
+- name: Implementing docker-compose with Ansible playbooks
+  hosts: all
+  tasks:
+   - name: Start a myswl container
+     docker_container:
+      image: mysql:5
+      name: db
+      env:
+       MYSQL_ROOT_PASSWORD: intelliqit
+
+   - name: Create a wordpress container and link with the mysql container
+     docker_container:
+      image: wordpress
+      name: mywordpress
+      ports:
+       - 8888:80
+      links:
+       - db:mysql
+...
+

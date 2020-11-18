@@ -1,0 +1,19 @@
+---
+- name: Working on docker containers using Ansible
+  hosts: all
+  tasks:
+   - name: Create a tomcat container
+     docker_container:
+      image: tomcat
+      name: webserver
+   - name: Stop the tomcat container
+     docker_container:
+      name: webserver
+      state: stopped
+   - name: Delete the tomcat container
+     docker_container:
+      name: webserver
+      state: absent
+
+...
+
