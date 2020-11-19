@@ -1,0 +1,11 @@
+---
+- name: Join workers to the swarm cluster
+  hosts: Workers
+  tasks:
+   - name: Jeoin workers to swarm
+     docker_swarm:
+      state: join
+      advertise_addr: 172.31.59.6
+      join_token: SWMTKN-1-1zo3j49iic4oewwgq90tz8ll1coqutsxs56vqg4xoy3ukqru5r-bgxpien43s62urop0o5qy2jqs
+      remote_addrs: ['172.31.59.6:2377']
+

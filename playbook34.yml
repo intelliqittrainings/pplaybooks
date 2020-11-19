@@ -1,0 +1,13 @@
+---
+- name: Login into dockerhub and upload a docker image
+  hosts: 172.31.59.6
+  tasks:
+   - name: Login into dockerhub
+     docker_login:
+      username: sai
+      password: intelliq1
+      email: intelliqit@gmail.com
+   - name: Push the docker images
+     docker_image:
+      name: intelliqit/ubuntu_nov11
+      push: yes
